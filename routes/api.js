@@ -21,6 +21,24 @@ const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expires
 router.get('/health', (req, res) => res.status(200).json({ status: 'API is running healthy' }));
 
 // ==========================================
+// 21. Delete All Data (Open)
+// ==========================================
+router.delete('/delete-all', async (req, res) => {
+  try {
+    await Promise.all([
+      User.deleteMany({}),
+      Visitor.deleteMany({}),
+      Contact.deleteMany({}),
+      Counter.deleteMany({})
+    ]);
+
+    res.json({ message: 'All data deleted from MongoDB' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// ==========================================
 // AUTH & USERS
 // ==========================================
 
